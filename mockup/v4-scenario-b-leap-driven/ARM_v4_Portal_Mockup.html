@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>ARM v4 - portal mockup aligned to the TO-BE flow (illustrative)</title>
+<style>
+:root{--pri:#7a1fd6;--navy:#1f1a4d;--bg:#f4f5fa;--line:#dcdde8;--txt:#1d1d2b;--mut:#6b6d80}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--txt);background:var(--bg)}
+.top{height:38px;background:linear-gradient(90deg,#e3e9ff,#6f8cff);display:flex;align-items:center;padding:0 14px;gap:12px;font-weight:bold;color:#2b2b5a}
+.top b{font-size:17px;color:#111}
+.sub{background:var(--navy);color:#fff;text-align:center;font-size:12px;padding:4px}
+.banner{background:#fff6d6;border-bottom:1px solid #f0d77a;padding:5px 14px;font-size:12px;color:#6a5600}
+.new{display:inline-block;background:var(--pri);color:#fff;font-size:9px;font-weight:bold;padding:1px 5px;border-radius:8px;margin-left:5px;vertical-align:middle}
+.tabs{display:flex;gap:2px;background:#fff;border-bottom:1px solid var(--line);padding:0 14px}
+.tab{padding:10px 16px;cursor:pointer;color:var(--mut);border-bottom:3px solid transparent;font-size:13px}
+.tab.on{color:var(--pri);border-color:var(--pri);font-weight:bold}
+.page{display:none;padding:14px}.page.on{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px;margin-bottom:12px}
+.card h3{margin:0 0 10px;font-size:13px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:4px;padding:7px 12px;font-size:12px;font-weight:bold;cursor:pointer}
+.btn.sec{background:#fff;color:var(--pri);border:1px solid var(--pri)}
+select,input.f{border:1px solid var(--line);border-radius:4px;padding:6px 8px;font-size:12px;background:#fff}
+table{border-collapse:collapse;width:100%}th,td{padding:6px 8px;border-bottom:1px solid #ececf4;text-align:left;white-space:nowrap}
+th{font-size:11px;color:#fff;background:#6fb7ff}th.g2{background:#e9dd9f;color:#333}th.g3{background:#b7e0bd;color:#333}th.g0{background:#8d92a8}th.g4{background:#d8c3f5;color:#333}
+tr:nth-child(even) td{background:#f7f5fc}tr.sel td{background:#e8dcff!important}tr.click{cursor:pointer}
+.pill{display:inline-block;border-radius:10px;padding:2px 9px;font-size:11px;font-weight:bold}
+.s1{background:#e5e7f0;color:#444}.s2{background:#d6e6ff;color:#1b4fa0}.s3{background:#e6dcff;color:#5a24b5}.s4{background:#fff0c2;color:#7a5a00}
+.s5{background:#cdeee9;color:#0a6a5c}.s6{background:#d4f0d0;color:#1f6a1a}.s7{background:#bfe8bd;color:#14501a}.sx{background:#ffd6d6;color:#a01818}.sc{background:#e4e4e4;color:#666}
+.ft{display:inline-block;border:1px solid #9ab98a;background:#eef7e6;color:#2d5a14;border-radius:3px;padding:0 5px;font-size:10px;font-weight:bold;margin-right:3px}
+.fm{display:inline-block;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:bold;background:#eaf1ff;border:1px solid #2e6fd6;color:#1b4fa0}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:12px;padding:3px 9px;margin:0 3px 3px 0;font-size:11px;background:#fff}
+.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+a.l{color:var(--pri);text-decoration:none;font-weight:bold}.ok{color:#1f8a2e;font-weight:bold}.no{color:#b36b00;font-weight:bold}.mut{color:var(--mut)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px}.kpi .n{font-size:28px;font-weight:bold;color:var(--navy)}.kpi .t{color:var(--mut);font-size:11px}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0}.bar .lab{width:130px;font-size:12px}.bar .tr{flex:1;background:#eceef6;height:16px;border-radius:3px}.bar .fi{height:16px;border-radius:3px;background:var(--pri)}.bar .v{width:34px;text-align:right;font-weight:bold}
+.drawer{position:fixed;right:0;top:0;bottom:0;width:580px;background:#fff;border-left:1px solid var(--line);box-shadow:-6px 0 20px rgba(0,0,0,.15);padding:16px;overflow:auto;display:none;z-index:9}
+.drawer.on{display:block}.x{float:right;cursor:pointer;font-size:18px}
+.step{display:flex;align-items:flex-start;margin:6px 0 14px}.st{flex:1;text-align:center;font-size:10px;color:var(--mut)}
+.st i{display:block;margin:0 auto 4px;width:16px;height:16px;border-radius:50%;background:#dcdde8}.st small{display:block;font-size:9px;color:#999}.st.done i{background:#2e9e3f}.st.cur i{background:var(--pri);box-shadow:0 0 0 4px #e0ccff}.st.cur{color:var(--pri);font-weight:bold}.st.done{color:#2e7d38}
+.plate{display:grid;grid-template-columns:20px repeat(12,1fr);gap:3px;font-size:9px}.plate div{height:22px;border-radius:50%;background:#eceef6;text-align:center;line-height:22px;color:#777}.plate .h{background:none;border-radius:0}
+.plate .u{background:#c9b3f2;color:#3b1a7a}.plate .c{background:#ffe08a;color:#6a4a00}
+.ent{border:2px solid var(--navy);border-radius:6px;background:#fff;padding:8px;min-width:170px}.ent b{display:block;background:var(--navy);color:#fff;margin:-8px -8px 6px;padding:5px 8px;border-radius:3px 3px 0 0}.ent div{font-size:11px;padding:1px 0}
+.arrow{align-self:center;font-size:20px;color:var(--navy);padding:0 6px}
+.note{font-size:11px;color:var(--mut);margin-top:6px}
+.rel h4{margin:12px 0 4px;font-size:13px}.rel ul{margin:0;padding-left:18px}.rel li{margin:3px 0}
+.tag{font-size:10px;font-weight:bold;padding:1px 6px;border-radius:3px;margin-right:6px;color:#fff}.tag.n{background:var(--pri)}.tag.i{background:#2e7da0}.tag.f{background:#b3541e}
+.flow svg{width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+.steps li{margin:4px 0}.ro{background:#eef3ff;border:1px solid #bcd0ff;color:#27458a;border-radius:4px;padding:6px 10px;font-size:12px;margin-bottom:10px}
+</style></head><body>
+<div class="top">&#9776; <b>sanofi</b> Connected Lab Automation Platform</div>
+<div class="sub">Analytical Request Management &nbsp;|&nbsp; v4.0 (mockup)</div>
+<div class="banner">MOCKUP with illustrative data, built from the TO-BE flow diagram. Not the real portal. <span class="new">NEW</span> marks what is proposed for v4; unmarked items exist today.</div>
+<div class="tabs" id="tabs">
+ <div class="tab on" data-p="req">Requests</div>
+ <div class="tab" data-p="wl">Worklists <span class="new">NEW</span></div>
+ <div class="tab" data-p="dash">Dashboard</div>
+ <div class="tab" data-p="dm">Flow, data model &amp; glossary <span class="new">NEW</span></div>
+ <div class="tab" data-p="rn">Release notes <span class="new">NEW</span></div>
+</div>
+
+<!-- REQUESTS -->
+<div class="page on" id="req">
+ <div class="ro">Read-only view of status. Requests are created and changed in <b>ChemDiary</b>; <b>LEAP</b> creates worklists, reads files from LDI and registers results. ARM shows the status LEAP reports. <span class="mut">(Per TO-BE flow: Request &rarr; LEAP, Status &rarr; ARM.)</span></div>
+ <div class="card">
+  <div class="row">
+   <select><option>Default view</option><option>Needs attention</option></select>
+   <select><option>Last 30 days</option><option>Last 7 days</option><option>Custom range&hellip;</option></select>
+   <select><option>Method: all</option><option>LCMS_PURITY</option><option>NMR_PURITY</option><option>NMR_1H</option></select>
+   <select><option>Instrument: all</option><option>Instrument 1</option><option>Instrument 2</option><option>Instrument 3</option></select>
+   <input class="f" placeholder="Search request ID, batch, container, task&hellip;" style="width:240px"><span class="new">NEW</span>
+   <span style="flex:1"></span><button class="btn sec">COLUMNS</button><button class="btn">EXPORT TO EXCEL (30 of 219)</button>
+  </div>
+  <div style="margin-top:10px"><b style="font-size:11px">Status</b> <span class="new">NEW</span>&nbsp;
+   <span class="chip on">All</span><span class="chip">Requested</span><span class="chip">Ready for analyst</span><span class="chip">Worklist sent</span><span class="chip">Analysis begun</span><span class="chip">Data in LDI</span><span class="chip">Results registered</span><span class="chip">Completed</span><span class="chip">Failed (7)</span><span class="chip">Cancelled</span></div>
+ </div>
+ <div class="card" style="padding:0;overflow:auto"><table id="rt"></table>
+  <div class="note" style="padding:8px 12px">Page 1 of 8 &middot; 30 rows per page &middot; total count always shown <span class="new">NEW</span>. Click a row for the request detail. Status source and time come from LEAP events.</div></div>
+</div>
+
+<!-- WORKLISTS -->
+<div class="page" id="wl">
+ <div class="ro">Worklists are <b>created and sent by LEAP</b> from the request, one per instrument in that instrument's file format (10p, txt, spl). ARM only shows them.</div>
+ <div class="grid2" style="grid-template-columns:1.2fr 1fr">
+  <div class="card" style="padding:0;overflow:auto"><div style="padding:12px 12px 0"><h3>Worklists (last 7 days)</h3></div>
+   <table id="wt"></table></div>
+  <div>
+   <div class="card"><h3>WL-0187 &middot; Instrument 3 &middot; format spl</h3>
+    <div class="row mut" style="margin-bottom:8px"><span>Created by LEAP 2026-11-03 08:55</span><span>&middot;</span><span class="pill s6">Sent</span><span>&middot;</span><span>Files back in LDI: <b>38 of 45</b></span></div>
+    <div class="plate" id="plate"></div>
+    <div class="note">Purple = sample position &middot; Yellow = calibration</div></div>
+   <div class="card"><h3>Requests in WL-0187 (first 4 of 45)</h3>
+    <table><tr><th>Request</th><th>Batch</th><th>Container</th><th>Pos.</th><th>Result file</th></tr>
+     <tr><td><a class="l">ARM-004211</a></td><td>FF.SSG00003.1</td><td>0000001329</td><td>A1</td><td><span class="ft">RPT</span></td></tr>
+     <tr><td><a class="l">ARM-004208</a></td><td>FF.SAPB00041.3</td><td>0000001331</td><td>A2</td><td><span class="ft">RPT</span></td></tr>
+     <tr><td><a class="l">ARM-004203</a></td><td>FF.SSG00003.1</td><td>0000001329</td><td>A3</td><td><span class="no">awaiting</span></td></tr>
+     <tr><td><a class="l">ARM-004197</a></td><td>FF.SDE00138600003.1</td><td class="no">missing</td><td>A4</td><td><span class="no">not sent: container missing</span></td></tr></table>
+    <div class="note">The missing container ID is a data issue to fix in ChemDiary; LEAP reports the failure and ARM shows it.</div></div>
+  </div>
+ </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page" id="dash">
+ <div class="row" style="margin-bottom:10px"><b style="font-size:18px">Dashboard Overview</b><span class="new">REDESIGN</span><span style="flex:1"></span>
+  <select><option>All sites</option></select><select><option>Last 30 days</option></select><select><option>All projects</option></select>
+  <span class="mut">Auto-refresh every 60 s &middot; updated 10:43:50</span><button class="btn">REFRESH</button></div>
+ <div class="grid4" style="margin-bottom:12px">
+  <div class="kpi"><div class="n">196</div><div class="t">Open requests</div></div>
+  <div class="kpi"><div class="n">64</div><div class="t">Ready for analyst (no worklist yet)</div></div>
+  <div class="kpi"><div class="n">29</div><div class="t">Data in LDI, results not yet registered in ChemDiary</div></div>
+  <div class="kpi"><div class="n" style="color:#b01818">7</div><div class="t">Failed or stuck &gt; 5 days</div></div>
+ </div>
+ <div class="grid2">
+  <div class="card"><h3>Where requests are in the flow <span class="new">NEW</span></h3><div id="bflow"></div><div class="note">Stages follow the TO-BE flow: ChemDiary &rarr; LEAP &rarr; instrument &rarr; LDI &rarr; ChemDiary.</div></div>
+  <div class="card"><h3>Waiting time of open requests (ageing) <span class="new">NEW</span></h3><div id="bage"></div><div class="note">Click a bar to open the Requests tab filtered to that status or age.</div></div>
+  <div class="card"><h3>Volume by method <span class="mut" style="font-weight:normal">(bars, last 30 days)</span></h3><div id="bvol"></div></div>
+  <div class="card"><h3>Files stored in LDI by type <span class="new">NEW</span></h3><div id="bfile"></div></div>
+  <div class="card" style="grid-column:span 2"><h3>Usage by project code <span class="new">NEW</span> <span class="mut" style="font-weight:normal">(monthly accounting export)</span></h3>
+   <table><tr><th>Project</th><th>Requests</th><th>LCMS</th><th>NMR</th><th>Other</th></tr>
+    <tr><td>ALX0081</td><td>58</td><td>31</td><td>20</td><td>7</td></tr><tr><td>ADV4359</td><td>34</td><td>18</td><td>12</td><td>4</td></tr>
+    <tr><td>LC81113</td><td>71</td><td>40</td><td>26</td><td>5</td></tr><tr><td class="no">No project code</td><td>21</td><td>9</td><td>8</td><td>4</td></tr></table>
+   <div class="note">&quot;No project code&quot; replaces placeholder codes such as LC00000 so gaps are visible.</div></div>
+ </div>
+</div>
+
+<!-- FLOW + DATA MODEL -->
+<div class="page" id="dm">
+ <div class="card flow"><h3>How the pieces work together (TO-BE)</h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 730" width="1100" height="730" font-family="Arial, Helvetica, sans-serif">
+<defs>
+ <marker id="mp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#7a1fd6"/></marker>
+ <marker id="mb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2e6fd6"/></marker>
+ <marker id="mg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2e9e3f"/></marker>
+ <marker id="mo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#d98200"/></marker>
+ <marker id="mk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#777"/></marker>
+</defs>
+<rect width="1100" height="730" fill="#ffffff"/>
+<text x="30" y="34" font-size="17" font-weight="bold" fill="#1f1a4d">TO-BE flow as drawn</text>
+
+<!-- ARM -->
+<rect x="470" y="10" width="210" height="64" rx="10" fill="#ffffff" stroke="#1f1a4d" stroke-width="3"/>
+<text x="575" y="35" font-size="13" font-weight="bold" text-anchor="middle" fill="#1f1a4d">Analytical Request Management</text>
+<text x="575" y="52" font-size="11" text-anchor="middle" fill="#555">Requests grid + dashboard</text>
+<text x="575" y="66" font-size="11" text-anchor="middle" fill="#555">(view of status)</text>
+
+<!-- ChemDiary -->
+<rect x="30" y="120" width="170" height="80" rx="8" fill="#f1e9ff" stroke="#7a1fd6" stroke-width="2"/>
+<text x="115" y="152" font-size="16" font-weight="bold" text-anchor="middle" fill="#4b1a8f">ChemDiary</text>
+<text x="115" y="172" font-size="11" text-anchor="middle" fill="#555">study request / results</text>
+
+<!-- LEAP -->
+<rect x="470" y="120" width="210" height="80" rx="10" fill="#1f1a4d"/>
+<text x="575" y="153" font-size="15" font-weight="bold" text-anchor="middle" fill="#fff">Lab Automation</text>
+<text x="575" y="173" font-size="11" text-anchor="middle" fill="#cfd3ff">(LEAP) orchestrates the flow</text>
+
+<!-- Request / results / status -->
+<path d="M200 140 H470" stroke="#7a1fd6" stroke-width="2.5" fill="none" marker-end="url(#mp)"/>
+<text x="335" y="132" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a1fd6">Request</text>
+<path d="M470 182 H200" stroke="#7a1fd6" stroke-width="2.5" fill="none" marker-end="url(#mp)"/>
+<text x="335" y="200" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a1fd6">Results</text>
+<path d="M575 120 V74" stroke="#d98200" stroke-width="2.5" fill="none" marker-end="url(#mo)"/>
+<text x="586" y="102" font-size="12" font-weight="bold" fill="#d98200">Status</text>
+
+<!-- Instruments -->
+<g>
+ <rect x="880" y="380" width="190" height="80" rx="8" fill="#eaf1ff" stroke="#2e6fd6" stroke-width="2"/>
+ <text x="975" y="412" font-size="13" font-weight="bold" text-anchor="middle" fill="#1b4fa0">Instrument 1</text>
+ <text x="975" y="432" font-size="11" text-anchor="middle" fill="#555">worklist format: 10p</text>
+ <rect x="880" y="480" width="190" height="80" rx="8" fill="#eaf1ff" stroke="#2e6fd6" stroke-width="2"/>
+ <text x="975" y="512" font-size="13" font-weight="bold" text-anchor="middle" fill="#1b4fa0">Instrument 2</text>
+ <text x="975" y="532" font-size="11" text-anchor="middle" fill="#555">worklist format: txt</text>
+ <rect x="880" y="580" width="190" height="80" rx="8" fill="#eaf1ff" stroke="#2e6fd6" stroke-width="2"/>
+ <text x="975" y="612" font-size="13" font-weight="bold" text-anchor="middle" fill="#1b4fa0">Instrument 3</text>
+ <text x="975" y="632" font-size="11" text-anchor="middle" fill="#555">worklist format: spl</text>
+</g>
+<!-- worklists -->
+<path d="M680 135 H840 V400 H880" stroke="#2e6fd6" stroke-width="2.5" fill="none" marker-end="url(#mb)"/>
+<path d="M680 160 H815 V500 H880" stroke="#2e6fd6" stroke-width="2.5" fill="none" marker-end="url(#mb)"/>
+<path d="M680 185 H790 V600 H880" stroke="#2e6fd6" stroke-width="2.5" fill="none" marker-end="url(#mb)"/>
+<text x="690" y="130" font-size="11" font-weight="bold" fill="#2e6fd6">worklists</text>
+<text x="690" y="155" font-size="11" font-weight="bold" fill="#2e6fd6">worklists</text>
+<text x="690" y="180" font-size="11" font-weight="bold" fill="#2e6fd6">worklists</text>
+
+<!-- LDI -->
+<rect x="240" y="290" width="480" height="415" rx="44" fill="#fbfbfd" stroke="#222" stroke-width="2.5"/>
+<text x="480" y="320" font-size="14" font-weight="bold" text-anchor="middle" fill="#222">R&amp;D Lab Data Inventory (LDI)</text>
+<rect x="290" y="340" width="140" height="56" rx="6" fill="#fff" stroke="#8a2be2" stroke-width="2"/>
+<text x="360" y="365" font-size="12" font-weight="bold" text-anchor="middle" fill="#5a1fa0">Catalog / index</text>
+<text x="360" y="382" font-size="10" text-anchor="middle" fill="#666">metadata</text>
+<rect x="380" y="430" width="260" height="90" rx="6" fill="#e8f3d6" stroke="#6a9a1f" stroke-width="2"/>
+<text x="510" y="468" font-size="14" font-weight="bold" text-anchor="middle" fill="#3d5c0d">Storage (AWS)</text>
+<text x="510" y="488" font-size="11" text-anchor="middle" fill="#555">raw data and results, read-only</text>
+<g font-size="12" font-weight="bold" text-anchor="middle">
+ <rect x="345" y="580" width="90" height="44" rx="5" fill="#fff" stroke="#c0392b" stroke-width="2"/><text x="390" y="607" fill="#c0392b">PDF</text>
+ <rect x="455" y="580" width="90" height="44" rx="5" fill="#fff" stroke="#555" stroke-width="2"/><text x="500" y="607" fill="#333">JDX</text>
+ <rect x="565" y="580" width="90" height="44" rx="5" fill="#fff" stroke="#555" stroke-width="2"/><text x="610" y="607" fill="#333">RPT</text>
+</g>
+<path d="M390 580 V520" stroke="#2e9e3f" stroke-width="2" fill="none" marker-end="url(#mg)"/><path d="M500 580 V520" stroke="#2e9e3f" stroke-width="2" fill="none" marker-end="url(#mg)"/><path d="M610 580 V520" stroke="#2e9e3f" stroke-width="2" fill="none" marker-end="url(#mg)"/>
+<path d="M360 396 V430" stroke="#777" stroke-width="1.5" fill="none" stroke-dasharray="4 3" marker-end="url(#mk)" marker-start="url(#mk)"/>
+
+<!-- Assistant -->
+<rect x="40" y="338" width="150" height="62" rx="8" fill="#ffe3ee" stroke="#d6336c" stroke-width="2"/>
+<text x="115" y="364" font-size="12" font-weight="bold" text-anchor="middle" fill="#a3174d">Assistant / chatbot</text>
+<text x="115" y="382" font-size="10" text-anchor="middle" fill="#666">(pink icon in diagram: confirm)</text>
+<path d="M290 368 H190" stroke="#777" stroke-width="2" fill="none" marker-end="url(#mk)"/>
+
+<!-- LDI -> LEAP -->
+<path d="M520 290 V200" stroke="#2e9e3f" stroke-width="2.5" fill="none" marker-end="url(#mg)"/>
+<text x="528" y="250" font-size="11" font-weight="bold" fill="#2e9e3f">files / results read by LEAP</text>
+
+<!-- instruments -> LDI -->
+<path d="M880 440 H720" stroke="#2e9e3f" stroke-width="2.5" fill="none" marker-end="url(#mg)"/>
+<text x="750" y="432" font-size="11" font-weight="bold" fill="#2e9e3f" text-anchor="middle" stroke="#fff" stroke-width="3" paint-order="stroke">XLS/TXT</text>
+<path d="M880 540 H720" stroke="#2e9e3f" stroke-width="2.5" fill="none" marker-end="url(#mg)"/>
+<text x="750" y="532" font-size="11" font-weight="bold" fill="#2e9e3f" text-anchor="middle" stroke="#fff" stroke-width="3" paint-order="stroke">PS</text>
+<path d="M880 640 H720" stroke="#2e9e3f" stroke-width="2.5" fill="none" marker-end="url(#mg)"/>
+<text x="750" y="632" font-size="11" font-weight="bold" fill="#2e9e3f" text-anchor="middle" stroke="#fff" stroke-width="3" paint-order="stroke">RPT</text>
+
+<!-- step numbers -->
+<g font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">
+ <circle cx="270" cy="123" r="10" fill="#7a1fd6"/><text x="270" y="127">1</text>
+ <circle cx="790" cy="118" r="10" fill="#2e6fd6"/><text x="790" y="122">2</text>
+ <circle cx="1040" cy="372" r="10" fill="#2e6fd6" opacity="0"/>
+ <circle cx="925" cy="470" r="10" fill="#555" opacity="0"/>
+ <circle cx="745" cy="470" r="10" fill="#2e9e3f"/><text x="745" y="474">3</text>
+ <circle cx="505" cy="270" r="10" fill="#2e9e3f"/><text x="505" y="274">4</text>
+ <circle cx="270" cy="199" r="10" fill="#7a1fd6"/><text x="270" y="203">5</text>
+ <circle cx="548" cy="97" r="10" fill="#d98200"/><text x="548" y="101">6</text>
+</g>
+
+<!-- legend -->
+<g font-size="11" fill="#333">
+ <text x="30" y="560" font-weight="bold">Legend</text>
+ <path d="M30 575 H70" stroke="#7a1fd6" stroke-width="2.5"/><text x="78" y="579">request / results (ChemDiary)</text>
+ <path d="M30 595 H70" stroke="#2e6fd6" stroke-width="2.5"/><text x="78" y="599">worklists to instruments</text>
+ <path d="M30 615 H70" stroke="#2e9e3f" stroke-width="2.5"/><text x="78" y="619">data files into / out of LDI</text>
+ <path d="M30 635 H70" stroke="#d98200" stroke-width="2.5"/><text x="78" y="639">status to ARM</text>
+ <path d="M30 655 H70" stroke="#777" stroke-width="2"/><text x="78" y="659">catalog / assistant</text>
+</g>
+</svg>
+
+  <ol class="steps"><li><b>1 Request:</b> the chemist raises the study request in ChemDiary; it goes to Lab Automation (LEAP). No Analytical Experiment is created in ChemDiary.</li>
+  <li><b>2 Worklists:</b> LEAP creates worklists and sends them to the instruments in their formats (10p, txt, spl).</li>
+  <li><b>3 Files:</b> the instruments write result files (XLS/TXT, PS, RPT) into the Lab Data Inventory; processed files such as JDX and PDF are stored alongside.</li>
+  <li><b>4 Read:</b> LEAP reads the files and results from LDI.</li>
+  <li><b>5 Results:</b> LEAP registers results and attachments in ChemDiary automatically.</li>
+  <li><b>6 Status:</b> LEAP sends status updates to ARM, which shows them in the Requests grid and the dashboard.</li></ol>
+  <div class="note">Open points: what the pink &quot;assistant&quot; icon next to the LDI catalog is; the meaning of the 10p, txt and spl formats; and whether ARM keeps its own request ID or only mirrors LEAP and ChemDiary IDs.</div></div>
+ <div class="card"><h3>Data model (simplified) <span class="new">NEW</span></h3>
+  <div class="row" style="align-items:stretch;flex-wrap:nowrap;overflow:auto;padding:6px 0">
+   <div class="ent"><b>ChemDiary study task</b><div>Task ID</div><div>Study name</div><div>Project code</div></div><div class="arrow">&rarr;</div>
+   <div class="ent"><b>Request</b><div>ARM request ID</div><div>Current status</div><div>Requested date</div><div>Legacy UNILIMS ID</div></div><div class="arrow">1..n</div>
+   <div class="ent"><b>Method</b><div>Method code</div><div>Instrument / lab</div><div>Status</div></div><div class="arrow">1..n</div>
+   <div class="ent"><b>Sample</b><div>Batch</div><div>Container ID</div><div>Plate / well</div><div>Amount + unit</div></div>
+  </div>
+  <div class="row" style="align-items:stretch;margin-top:8px">
+   <div class="ent"><b>Worklist (by LEAP)</b><div>WL ID</div><div>Instrument</div><div>Format: 10p / txt / spl</div><div>Sent status</div></div>
+   <div class="ent"><b>Result file (in LDI)</b><div>Path</div><div>Type: XLS/TXT, PS, RPT, JDX, PDF</div><div>Received at</div><div>Registered in ChemDiary</div></div>
+   <div class="ent"><b>Status event (from LEAP)</b><div>From &rarr; to</div><div>Source system</div><div>When</div><div>Message</div></div>
+  </div>
+  <div class="note">ARM stores the status events it receives and a current status per request and method. Master data stays in ChemDiary; files stay in LDI (to be confirmed with the Lead Developer).</div></div>
+ <div class="card"><h3>Glossary <span class="new">NEW</span></h3>
+  <table><tr><th>Term</th><th>Definition (proposed, to be agreed)</th></tr>
+   <tr><td><b>Request</b></td><td>Container for all analyses ordered for one batch in ChemDiary.</td></tr>
+   <tr><td><b>Method</b></td><td>One analytical technique within a request, run on one instrument.</td></tr>
+   <tr><td><b>Task Count (dashboard)</b></td><td>Number of methods started in the period. A task with LCMS and NMR counts once per method.</td></tr>
+   <tr><td><b>LEAP / Lab Automation</b></td><td>Moves requests, worklists, files and results between ChemDiary, instruments and LDI, and reports status to ARM.</td></tr>
+   <tr><td><b>Worklist</b></td><td>Instrument input file created by LEAP. Formats 10p, txt and spl are as labelled in the flow diagram; exact meaning to confirm.</td></tr>
+   <tr><td><b>LDI</b></td><td>Lab Data Inventory: catalog plus AWS storage for raw data and results, read-only for users.</td></tr>
+   <tr><td><b>Status: Ready for analyst</b></td><td>Request received by LEAP, worklist not yet sent.</td></tr>
+   <tr><td><b>Status: Worklist sent</b></td><td>LEAP has delivered the worklist to the instrument.</td></tr>
+   <tr><td><b>Status: Data in LDI</b></td><td>At least one result file for the method is stored in LDI.</td></tr>
+   <tr><td><b>Status: Results registered</b></td><td>LEAP has registered results and attachments in ChemDiary.</td></tr></table></div>
+</div>
+
+<!-- RELEASE NOTES -->
+<div class="page" id="rn">
+ <div class="card rel"><h3>Release notes</h3>
+  <h4>v4.0 &mdash; planned</h4>
+  <ul><li><span class="tag n">NEW</span>Status lifecycle fed by LEAP events, with history and source system</li>
+   <li><span class="tag n">NEW</span>Worklists tab: worklists created by LEAP per instrument, with format, sent status and files returned</li>
+   <li><span class="tag n">NEW</span>LDI information in the grid: file types received, &quot;Open in LDI&quot; link, results registered in ChemDiary</li>
+   <li><span class="tag n">NEW</span>Flow, data model and glossary tab; Release notes tab</li>
+   <li><span class="tag i">IMPROVED</span>Dashboard: position in the flow, ageing, files by type, project usage; bars instead of smoothed lines; auto-refresh</li>
+   <li><span class="tag i">IMPROVED</span>Requests grid: search, status and instrument filters, column chooser, total count</li>
+   <li><span class="tag f">FIXED</span>Export and row limit now show the total number of matches</li></ul>
+  <h4>v3.x &mdash; current (illustrative)</h4>
+  <ul><li>Requests grid with column filters and Excel export</li><li>Dashboard with study, project and method distributions</li></ul>
+  <div class="note">Placeholder text. Real content to be agreed with the team.</div></div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer" id="dr">
+ <span class="x" id="drx">&times;</span>
+ <h2 style="margin:0">ARM-004211 <span class="new">NEW</span></h2>
+ <div class="mut">Task-101210 &middot; HTSPC_LIBRARYVAL &middot; Project ALX0081 &middot; Legacy UNILIMS 400021798</div>
+ <h4>Status lifecycle <span class="mut" style="font-weight:normal">(source system under each step)</span></h4>
+ <div class="step"><div class="st done"><i></i>Requested<small>ChemDiary</small></div><div class="st done"><i></i>Ready<small>LEAP</small></div><div class="st done"><i></i>Worklist sent<small>LEAP</small></div><div class="st cur"><i></i>Analysis<small>Instrument</small></div><div class="st"><i></i>Data in LDI<small>LDI</small></div><div class="st"><i></i>Registered<small>ChemDiary</small></div><div class="st"><i></i>Done<small>LEAP</small></div></div>
+ <h4>Methods</h4>
+ <table><tr><th>Method</th><th>Instrument</th><th>Status</th><th>Worklist</th></tr>
+  <tr><td>LCMS_PURITY</td><td>Instrument 3</td><td><span class="pill s4">Analysis begun</span></td><td><a class="l">WL-0187</a> <span class="fm">spl</span></td></tr>
+  <tr><td>NMR_1H</td><td>Instrument 2</td><td><span class="pill s2">Ready for analyst</span></td><td class="mut">&ndash;</td></tr></table>
+ <h4>Sample</h4>
+ <table><tr><td>Batch</td><td>FF.SSG00003.1</td><td>Container</td><td>0000001329</td></tr><tr><td>Plate / well</td><td>P-0187 / A1</td><td>Amount</td><td>20 mg</td></tr></table>
+ <h4>Data and links</h4>
+ <table><tr><td>LDI folder</td><td><a class="l">/ldi/ALX0081/ARM-004211/</a></td></tr><tr><td>Files in LDI</td><td><span class="no">0 of 1 expected</span> <span class="mut">(expected type: RPT)</span></td></tr><tr><td>ChemDiary</td><td><a class="l">Open study task</a> &middot; results not yet registered</td></tr></table>
+ <h4>Status history</h4>
+ <table><tr><th>When</th><th>Change</th><th>Source</th></tr>
+  <tr><td>11-03 09:12</td><td>Worklist sent &rarr; Analysis begun</td><td>LEAP</td></tr><tr><td>11-03 08:55</td><td>Ready for analyst &rarr; Worklist sent (WL-0187, spl)</td><td>LEAP</td></tr><tr><td>10-30 14:02</td><td>Requested &rarr; Ready for analyst</td><td>LEAP</td></tr><tr><td>10-30 14:01</td><td>Request created</td><td>ChemDiary</td></tr></table>
+ <div class="note">Read-only. To change or cancel a request, use ChemDiary; the change returns here as a status event.</div>
+</div>
+
+<script>
+const S={1:['Requested','s1'],2:['Ready for analyst','s2'],3:['Worklist sent','s3'],4:['Analysis begun','s4'],5:['Data in LDI','s5'],6:['Results registered','s6'],7:['Completed','s7'],8:['Failed','sx'],9:['Cancelled','sc']};
+// id, task, studyname, method, status, batch, container, worklist(id|fmt), files[], inChemDiary, updated, unilims
+const rows=[
+['ARM-004211','Task-101210','HTSPC_LIBRARYVAL','LCMS_PURITY',4,'FF.SSG00003.1','0000001329','WL-0187|spl',[],'pending','11-03 09:12','400021798'],
+['ARM-004208','Task-101207','HTSPC_LIBRARYVAL','LCMS_PURITY',3,'FF.SAPB00041.3','0000001331','WL-0187|spl',[],'pending','11-03 08:55','400021793'],
+['ARM-004203','Task-101204','HTSPC_LIBRARYVAL','LCMS_PURITY',3,'FF.SSG00003.1','0000001329','WL-0187|spl',[],'pending','11-03 08:55','400021792'],
+['ARM-004197','Task-101198','HTSPC_LCMS_NMR_PURITY','LCMS_PURITY',8,'FF.SDE00138600003.1','','&ndash;',[],'pending','10-30 13:40','400021790'],
+['ARM-004197','Task-101198','HTSPC_LCMS_NMR_PURITY','NMR_PURITY',2,'FF.SDE00138600003.1','','&ndash;',[],'pending','10-30 13:40','400021790'],
+['ARM-004150','Task-101094','AN_ACHIRAL','LCMS_PURITY',5,'FF.SSG00003.1','0000001329','WL-0185|spl',['RPT'],'pending','11-02 16:20','400021788'],
+['ARM-004146','Task-101091','HTSPC_LCMS_NMR_PURITY','NMR_PURITY',6,'FF.SSG00003.1','0000001329','WL-0186|txt',['PS','PDF'],'yes','11-02 17:05','400021787'],
+['ARM-004139','Task-101088','HTSPC_LIBRARYVAL','LCMS_PURITY',3,'FF.SSG00003.1','0000001328','WL-0187|spl',[],'pending','11-03 08:55','400021786'],
+['ARM-004131','Task-101086','AN_ACHIRAL','NMR_1H',4,'FF.SSG00003.1','0000001328','WL-0186|txt',[],'pending','11-02 10:11','400021785'],
+['ARM-004120','Task-101083','HTSPC_LCMS_NMR_PURITY','LCMS_PURITY',8,'FF.SSG00003.1','0000001328','WL-0185|spl',[],'pending','11-01 12:30','400021784'],
+['ARM-003988','Task-100270','Prep Peptide','LCMS_PURITY',7,'FF.SDE00138600003.1','0000001322','WL-0170|10p',['XLS/TXT','JDX','PDF'],'yes','10-20 09:00','400021764'],
+['ARM-003976','Task-99615','CoA_Small_Molecules','EA',2,'FF.SU109990500005.1','','&ndash;',[],'pending','10-12 11:48','400021715'],
+['ARM-003901','Task-99595','1H','NMR_1H',9,'FF.SU109990500005.4','','&ndash;',[],'&ndash;','10-10 08:30','400021714']];
+const th='<tr><th>Request ID <span class="new">NEW</span></th><th>Study task</th><th>Task study name</th><th>Method <span class="new">NEW</span></th><th>Status</th><th class="g2">Batch</th><th class="g2">Container</th><th class="g4">Worklist <span class="new">NEW</span></th><th class="g3">Files in LDI <span class="new">NEW</span></th><th class="g3">In ChemDiary <span class="new">NEW</span></th><th>Status updated (by LEAP)</th><th class="g0">Legacy UNILIMS ID</th></tr>';
+document.getElementById('rt').innerHTML=th+rows.map((r,i)=>{
+ const s=S[r[4]];const wl=r[7].includes('|')?`<a class="l">${r[7].split('|')[0]}</a> <span class="fm">${r[7].split('|')[1]}</span>`:'<span class="mut">&ndash;</span>';
+ const f=r[8].length?r[8].map(x=>`<span class="ft">${x}</span>`).join('')+' <a class="l">Open in LDI</a>':(r[4]>=3&&r[4]<8?'<span class="no">awaiting</span>':'<span class="mut">&ndash;</span>');
+ const cd=r[9]=='yes'?'<span class="ok">&#10003; registered</span>':(r[9]=='pending'?'<span class="no">pending</span>':'<span class="mut">&ndash;</span>');
+ return `<tr class="click" data-i="${i}"><td><a class="l">${r[0]}</a></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="pill ${s[1]}">${s[0]}</span></td><td>${r[5]}</td><td>${r[6]||'<span class="no">missing</span>'}</td><td>${wl}</td><td>${f}</td><td>${cd}</td><td>${r[10]}</td><td class="mut">${r[11]}</td></tr>`}).join('');
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===t.dataset.p));document.getElementById('dr').classList.remove('on')});
+document.querySelectorAll('#rt tr.click').forEach(tr=>tr.onclick=()=>document.getElementById('dr').classList.add('on'));
+document.getElementById('drx').onclick=()=>document.getElementById('dr').classList.remove('on');
+// worklists table
+const wls=[['WL-0187','Instrument 3','spl',45,'Sent','s6','38 of 45'],['WL-0186','Instrument 2','txt',12,'Sent','s6','12 of 12'],['WL-0185','Instrument 3','spl',8,'Send failed','sx','0 of 8'],['WL-0178','Instrument 1','10p',30,'Sent','s6','30 of 30'],['WL-0170','Instrument 1','10p',22,'Sent','s6','22 of 22']];
+document.getElementById('wt').innerHTML='<tr><th>Worklist</th><th>Instrument</th><th>Format</th><th>Created by</th><th>Requests</th><th>Sent</th><th>Files back</th></tr>'+wls.map((w,i)=>`<tr class="click ${i==0?'sel':''}"><td><a class="l">${w[0]}</a></td><td>${w[1]}</td><td><span class="fm">${w[2]}</span></td><td>LEAP</td><td>${w[3]}</td><td><span class="pill ${w[5]}">${w[4]}</span></td><td>${w[6]}</td></tr>`).join('');
+const pl=document.getElementById('plate');let h='<div class="h"></div>';for(let c=1;c<=12;c++)h+=`<div class="h">${c}</div>`;
+'ABCDEFGH'.split('').forEach((r,ri)=>{h+=`<div class="h">${r}</div>`;for(let c=1;c<=12;c++){let cl='',t='';const n=ri*12+c;if(n<=45&&!(ri==7&&c>=11)){cl='u';t=n}else if(ri==7&&c>=11){cl='c';t='Cal'}h+=`<div class="${cl}">${t}</div>`}});pl.innerHTML=h;
+function bars(id,data,max){document.getElementById(id).innerHTML=data.map(d=>`<div class="bar"><div class="lab">${d[0]}</div><div class="tr"><div class="fi" style="width:${d[1]/max*100}%;background:${d[2]}"></div></div><div class="v">${d[1]}</div></div>`).join('')}
+bars('bflow',[['Waiting for LEAP (requested)',18,'#9aa0b8'],['Ready, no worklist',64,'#4f86e8'],['Worklist sent / at instrument',78,'#8f5fe0'],['Data in LDI, not in ChemDiary',29,'#1fa391'],['Failed',7,'#d63838']],80);
+bars('bage',[['&lt; 1 day',71,'#2e9e3f'],['1 - 3 days',80,'#4f86e8'],['3 - 5 days',38,'#e0a800'],['&gt; 5 days',7,'#d63838']],90);
+bars('bvol',[['LCMS_PURITY',182,'#4f86e8'],['NMR_PURITY',140,'#8f5fe0'],['NMR_1H',95,'#1fa391'],['EA',41,'#e0a800'],['Ion chromatography',38,'#9aa0b8'],['Other methods',73,'#c8cbdc']],200);
+bars('bfile',[['XLS/TXT',212,'#2e9e3f'],['RPT',188,'#2e9e3f'],['PS',96,'#2e9e3f'],['PDF',140,'#c0392b'],['JDX',74,'#555']],220);
+</script></body></html>
