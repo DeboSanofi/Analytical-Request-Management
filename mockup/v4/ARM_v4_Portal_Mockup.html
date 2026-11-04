@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>ARM v4 - portal mockup (illustrative)</title>
+<style>
+:root{--pri:#7a1fd6;--navy:#1f1a4d;--bg:#f4f5fa;--line:#dcdde8;--txt:#1d1d2b;--mut:#6b6d80}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:var(--txt);background:var(--bg)}
+.top{height:38px;background:linear-gradient(90deg,#e3e9ff,#6f8cff);display:flex;align-items:center;padding:0 14px;gap:12px;font-weight:bold;color:#2b2b5a}
+.top b{font-size:17px;color:#111}
+.sub{background:var(--navy);color:#fff;text-align:center;font-size:12px;padding:4px}
+.banner{background:#fff6d6;border-bottom:1px solid #f0d77a;padding:5px 14px;font-size:12px;color:#6a5600}
+.new{display:inline-block;background:var(--pri);color:#fff;font-size:9px;font-weight:bold;padding:1px 5px;border-radius:8px;margin-left:5px;vertical-align:middle}
+.tabs{display:flex;gap:2px;background:#fff;border-bottom:1px solid var(--line);padding:0 14px}
+.tab{padding:10px 16px;cursor:pointer;color:var(--mut);border-bottom:3px solid transparent;font-size:13px}
+.tab.on{color:var(--pri);border-color:var(--pri);font-weight:bold}
+.page{display:none;padding:14px}.page.on{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px;margin-bottom:12px}
+.card h3{margin:0 0 10px;font-size:13px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:4px;padding:7px 12px;font-size:12px;font-weight:bold;cursor:pointer}
+.btn.sec{background:#fff;color:var(--pri);border:1px solid var(--pri)}.btn.dis{background:#cfcfdc;color:#fff}
+select,input.f{border:1px solid var(--line);border-radius:4px;padding:6px 8px;font-size:12px;background:#fff}
+table{border-collapse:collapse;width:100%}th,td{padding:6px 8px;border-bottom:1px solid #ececf4;text-align:left;white-space:nowrap}
+th{font-size:11px;color:#fff;background:#6fb7ff}th.g2{background:#e9dd9f;color:#333}th.g3{background:#b7e0bd;color:#333}th.g0{background:#8d92a8}
+tr:nth-child(even) td{background:#f7f5fc}tr.sel td{background:#e8dcff!important}tr.click{cursor:pointer}
+.pill{display:inline-block;border-radius:10px;padding:2px 9px;font-size:11px;font-weight:bold}
+.s1{background:#e5e7f0;color:#444}.s2{background:#d6e6ff;color:#1b4fa0}.s3{background:#e6dcff;color:#5a24b5}.s4{background:#fff0c2;color:#7a5a00}
+.s5{background:#cdeee9;color:#0a6a5c}.s6{background:#d4f0d0;color:#1f6a1a}.s7{background:#bfe8bd;color:#14501a}.sx{background:#ffd6d6;color:#a01818}.sc{background:#e4e4e4;color:#666}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:12px;padding:3px 9px;margin:0 3px 3px 0;font-size:11px;background:#fff}
+.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+a.l{color:var(--pri);text-decoration:none;font-weight:bold}.ok{color:#1f8a2e;font-weight:bold}.no{color:#b36b00;font-weight:bold}.mut{color:var(--mut)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px}.kpi .n{font-size:28px;font-weight:bold;color:var(--navy)}.kpi .t{color:var(--mut);font-size:11px}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0}.bar .lab{width:130px;font-size:12px}.bar .tr{flex:1;background:#eceef6;height:16px;border-radius:3px}.bar .fi{height:16px;border-radius:3px;background:var(--pri)}.bar .v{width:34px;text-align:right;font-weight:bold}
+.drawer{position:fixed;right:0;top:0;bottom:0;width:560px;background:#fff;border-left:1px solid var(--line);box-shadow:-6px 0 20px rgba(0,0,0,.15);padding:16px;overflow:auto;display:none;z-index:9}
+.drawer.on{display:block}.x{float:right;cursor:pointer;font-size:18px}
+.step{display:flex;align-items:flex-start;margin:6px 0 14px}.st{flex:1;text-align:center;font-size:10px;color:var(--mut);position:relative}
+.st i{display:block;margin:0 auto 4px;width:16px;height:16px;border-radius:50%;background:#dcdde8}.st.done i{background:#2e9e3f}.st.cur i{background:var(--pri);box-shadow:0 0 0 4px #e0ccff}.st.cur{color:var(--pri);font-weight:bold}.st.done{color:#2e7d38}
+.plate{display:grid;grid-template-columns:20px repeat(12,1fr);gap:3px;font-size:9px}.plate div{height:22px;border-radius:50%;background:#eceef6;text-align:center;line-height:22px;color:#777}.plate .h{background:none;border-radius:0}
+.plate .u{background:#c9b3f2;color:#3b1a7a}.plate .c{background:#ffe08a;color:#6a4a00}.plate .e{background:#ffb3b3;color:#800}
+.ent{border:2px solid var(--navy);border-radius:6px;background:#fff;padding:8px;min-width:170px}.ent b{display:block;background:var(--navy);color:#fff;margin:-8px -8px 6px;padding:5px 8px;border-radius:3px 3px 0 0}.ent div{font-size:11px;padding:1px 0}
+.arrow{align-self:center;font-size:20px;color:var(--navy);padding:0 6px}
+.note{font-size:11px;color:var(--mut);margin-top:6px}
+.rel h4{margin:12px 0 4px;font-size:13px}.rel ul{margin:0;padding-left:18px}.rel li{margin:3px 0}
+.tag{font-size:10px;font-weight:bold;padding:1px 6px;border-radius:3px;margin-right:6px;color:#fff}.tag.n{background:var(--pri)}.tag.i{background:#2e7da0}.tag.f{background:#b3541e}
+</style></head><body>
+<div class="top">&#9776; <b>sanofi</b> Connected Lab Automation Platform</div>
+<div class="sub">Analytical Request Management &nbsp;|&nbsp; v4.0 (mockup)</div>
+<div class="banner">MOCKUP with illustrative data. Not the real portal and not real requests. <span class="new">NEW</span> marks what is proposed for v4; unmarked items exist today.</div>
+<div class="tabs" id="tabs">
+ <div class="tab on" data-p="req">Requests</div>
+ <div class="tab" data-p="wl">Worklists <span class="new">NEW</span></div>
+ <div class="tab" data-p="dash">Dashboard</div>
+ <div class="tab" data-p="dm">Data model &amp; glossary <span class="new">NEW</span></div>
+ <div class="tab" data-p="rn">Release notes <span class="new">NEW</span></div>
+</div>
+
+<!-- ============ REQUESTS ============ -->
+<div class="page on" id="req">
+ <div class="card">
+  <div class="row">
+   <select><option>Default view</option><option>My open requests</option><option>Needs attention</option></select>
+   <select><option>Last 30 days</option><option>Last 7 days</option><option>Custom range&hellip;</option></select>
+   <select><option>Method: all</option><option>LCMS_PURITY</option><option>NMR_PURITY</option><option>NMR_1H</option><option>EA</option></select>
+   <select><option>Project: all</option><option>ALX0081</option><option>ADV4359</option></select>
+   <input class="f" placeholder="Search ARM ID, batch, container, task&hellip;" style="width:240px">
+   <span class="new">NEW</span>
+   <span style="flex:1"></span>
+   <button class="btn sec">COLUMNS</button><button class="btn sec">EXPORT TO EXCEL (30 of 219)</button>
+   <button class="btn dis" id="wlbtn">CREATE WORKLIST (0)</button>
+  </div>
+  <div style="margin-top:10px"><b style="font-size:11px">Status</b> <span class="new">NEW</span>&nbsp;
+   <span class="chip on">All</span><span class="chip">Requested</span><span class="chip on">Ready for analyst</span><span class="chip">Worklist created</span><span class="chip">Analysis begun</span><span class="chip">Data in LDI</span><span class="chip">Results registered</span><span class="chip">Completed</span><span class="chip">Failed (7)</span><span class="chip">Cancelled</span></div>
+ </div>
+ <div class="card" style="padding:0;overflow:auto"><table id="rt"></table>
+  <div class="note" style="padding:8px 12px">Page 1 of 8 &middot; 30 rows per page &middot; total count always shown <span class="new">NEW</span>. Group &quot;Legacy (UNILIMS)&quot; is collapsed by default and is removed after SPCLIMS retirement.</div></div>
+</div>
+
+<!-- ============ WORKLISTS ============ -->
+<div class="page" id="wl">
+ <div class="grid2" style="grid-template-columns:1.1fr 1fr">
+  <div>
+   <div class="card"><h3>1. Selected requests (4) &mdash; from the Requests tab</h3>
+    <table><tr><th>ARM ID</th><th>Batch</th><th>Container</th><th>Method</th><th>Plate pos.</th><th></th></tr>
+     <tr><td><a class="l">ARM-004211</a></td><td>FF.SSG00003.1</td><td>0000001329</td><td>LCMS_PURITY</td><td>A1</td><td class="mut">remove</td></tr>
+     <tr><td><a class="l">ARM-004208</a></td><td>FF.SAPB00041.3</td><td>0000001331</td><td>LCMS_PURITY</td><td>A2</td><td class="mut">remove</td></tr>
+     <tr><td><a class="l">ARM-004203</a></td><td>FF.SSG00003.1</td><td>0000001329</td><td>LCMS_PURITY</td><td>A3</td><td class="mut">remove</td></tr>
+     <tr><td><a class="l">ARM-004197</a></td><td>FF.SDE00138600003.1</td><td class="no">missing</td><td>LCMS_PURITY</td><td>A4</td><td class="mut">remove</td></tr></table>
+    <div class="note"><span class="no">1 validation issue:</span> container ID missing for ARM-004197. It must be fixed or excluded before the worklist can be sent.</div>
+    <div style="margin-top:8px"><button class="btn sec">+ ADD MORE REQUESTS</button></div></div>
+   <div class="card"><h3>2. Worklist settings</h3>
+    <div class="grid2">
+     <div>Method / lab<br><select style="width:100%"><option>LCMS_PURITY &middot; Lab FF-LCMS-2</option></select></div>
+     <div>Instrument<br><select style="width:100%"><option>LCMS-07 (Waters)</option></select></div>
+     <div>Template<br><select style="width:100%"><option>LCMS 96-well CSV v3</option><option>Excel sample list</option><option>.spl</option></select></div>
+     <div>Analyst<br><select style="width:100%"><option>(you)</option></select></div>
+     <div>Auto-sampler layout<br><select style="width:100%"><option>Plate 1 &middot; 96 wells</option></select></div>
+     <div>Calibration wells<br><select style="width:100%"><option>H11, H12 (standards)</option></select></div>
+    </div></div>
+  </div>
+  <div>
+   <div class="card"><h3>3. Preview: plate layout</h3><div class="plate" id="plate"></div>
+    <div class="note">Purple = sample &middot; Yellow = calibration &middot; Red = validation issue</div></div>
+   <div class="card"><h3>4. Output</h3>
+    <div class="row"><label><input type="checkbox" checked> Send to instrument via LEAP</label><label><input type="checkbox"> Download file</label></div>
+    <div class="row" style="margin-top:8px"><button class="btn">CREATE WORKLIST</button><button class="btn sec">SAVE AS DRAFT</button></div>
+    <div class="note">On creation, all 4 requests move to <span class="pill s3">Worklist created</span>, and the worklist ID is written to each request history.</div></div>
+   <div class="card"><h3>Recent worklists</h3>
+    <table><tr><th>WL ID</th><th>Instrument</th><th>Requests</th><th>Status</th><th>Created</th></tr>
+     <tr><td><a class="l">WL-0187</a></td><td>LCMS-07</td><td>45</td><td><span class="pill s6">Sent</span></td><td>2026-11-03</td></tr>
+     <tr><td><a class="l">WL-0186</a></td><td>NMR-02</td><td>12</td><td><span class="pill s6">Sent</span></td><td>2026-11-03</td></tr>
+     <tr><td><a class="l">WL-0185</a></td><td>LCMS-07</td><td>8</td><td><span class="pill sx">Send failed</span></td><td>2026-11-02</td></tr></table></div>
+  </div>
+ </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div class="page" id="dash">
+ <div class="row" style="margin-bottom:10px"><b style="font-size:18px">Dashboard Overview</b><span class="new">REDESIGN</span><span style="flex:1"></span>
+  <select><option>All sites</option></select><select><option>Last 30 days</option></select><select><option>All projects</option></select>
+  <span class="mut">Auto-refresh: every 60 s &middot; updated 10:43:50</span><button class="btn">REFRESH</button></div>
+ <div class="grid4" style="margin-bottom:12px">
+  <div class="kpi"><div class="n">196</div><div class="t">Open requests</div></div>
+  <div class="kpi"><div class="n">64</div><div class="t">Ready for analyst (waiting)</div></div>
+  <div class="kpi"><div class="n">3.2 d</div><div class="t">Median turnaround (request to results registered)</div></div>
+  <div class="kpi"><div class="n" style="color:#b01818">7</div><div class="t">Failed or stuck &gt; 5 days</div></div>
+ </div>
+ <div class="grid2">
+  <div class="card"><h3>Requests by status <span class="new">NEW</span></h3><div id="bstat"></div></div>
+  <div class="card"><h3>Waiting time of open requests (ageing) <span class="new">NEW</span></h3><div id="bage"></div>
+   <div class="note">Click a bar to open the Requests tab filtered to that status or age.</div></div>
+  <div class="card"><h3>Volume by method and month (bars, not smoothed lines)</h3><div id="bvol"></div></div>
+  <div class="card"><h3>Usage by project code <span class="new">NEW</span> <span class="mut" style="font-weight:normal">(monthly accounting export)</span></h3>
+   <table><tr><th>Project</th><th>Requests</th><th>LCMS</th><th>NMR</th><th>Other</th></tr>
+    <tr><td>ALX0081</td><td>58</td><td>31</td><td>20</td><td>7</td></tr><tr><td>ADV4359</td><td>34</td><td>18</td><td>12</td><td>4</td></tr>
+    <tr><td>LC81113</td><td>71</td><td>40</td><td>26</td><td>5</td></tr><tr><td class="no">No project code</td><td>21</td><td>9</td><td>8</td><td>4</td></tr></table>
+   <div class="note">&quot;No project code&quot; replaces placeholder codes such as LC00000 so gaps are visible.</div></div>
+ </div>
+</div>
+
+<!-- ============ DATA MODEL ============ -->
+<div class="page" id="dm">
+ <div class="card"><h3>Data model (simplified)</h3>
+  <div class="row" style="align-items:stretch;flex-wrap:nowrap;overflow:auto;padding:6px 0">
+   <div class="ent"><b>ChemDiary study task</b><div>Task ID</div><div>Study name</div><div>Project code</div></div><div class="arrow">&rarr;</div>
+   <div class="ent"><b>Request</b><div>ARM ID (key)</div><div>Status</div><div>Requested date</div><div>Legacy UNILIMS ID</div></div><div class="arrow">1..n</div>
+   <div class="ent"><b>Method</b><div>Method code</div><div>Lab / instrument</div><div>Status</div></div><div class="arrow">1..n</div>
+   <div class="ent"><b>Sample</b><div>Batch</div><div>Container ID</div><div>Plate / well</div><div>Amount + unit</div></div>
+  </div>
+  <div class="row" style="align-items:stretch;margin-top:8px">
+   <div class="ent"><b>Worklist</b><div>WL ID</div><div>Instrument</div><div>Template</div><div>Requests (n)</div></div>
+   <div class="ent"><b>Result file (in LDI)</b><div>Path</div><div>Format</div><div>Received at</div><div>Registered in ChemDiary</div></div>
+   <div class="ent"><b>Status history</b><div>From &rarr; to</div><div>Who / system</div><div>When</div><div>Reason</div></div>
+  </div>
+  <div class="note">A request has one or more methods; a method links to samples and, after analysis, to result files in LDI. A worklist groups methods of several requests.</div></div>
+ <div class="card"><h3>Glossary</h3>
+  <table><tr><th>Term</th><th>Definition (proposed, to be agreed)</th></tr>
+   <tr><td><b>Request</b></td><td>Container for all analyses ordered for one batch. Identified by the ARM ID.</td></tr>
+   <tr><td><b>Method</b></td><td>One analytical technique within a request, handled by one lab.</td></tr>
+   <tr><td><b>Task Count (dashboard)</b></td><td>Number of methods started in the period. A task with LCMS and NMR counts once per method.</td></tr>
+   <tr><td><b>Status: Ready for analyst</b></td><td>Request accepted and complete; no worklist yet.</td></tr>
+   <tr><td><b>Status: Data in LDI</b></td><td>At least one result file for the method is stored in the Lab Data Inventory.</td></tr>
+   <tr><td><b>Status: Results registered</b></td><td>Results and attachments are registered in ChemDiary.</td></tr>
+   <tr><td><b>LDI</b></td><td>Lab Data Inventory: read-only storage of raw data and results (AWS).</td></tr>
+   <tr><td><b>LEAP</b></td><td>Lab automation that moves requests, worklists and results between systems.</td></tr></table></div>
+</div>
+
+<!-- ============ RELEASE NOTES ============ -->
+<div class="page" id="rn">
+ <div class="card rel"><h3>Release notes</h3>
+  <h4>v4.0 &mdash; planned</h4>
+  <ul><li><span class="tag n">NEW</span>Request and method status lifecycle with history; ARM request ID</li>
+   <li><span class="tag n">NEW</span>Worklist builder (select requests, template, send via LEAP)</li>
+   <li><span class="tag n">NEW</span>Result files in LDI with &quot;file received&quot; flag and &quot;Open in LDI&quot; link; automatic status update</li>
+   <li><span class="tag n">NEW</span>Data model &amp; glossary tab; Release notes tab</li>
+   <li><span class="tag i">IMPROVED</span>Dashboard: status, ageing, turnaround; bar charts; auto-refresh; filters</li>
+   <li><span class="tag i">IMPROVED</span>Requests grid: search, status filter, column chooser, total count</li>
+   <li><span class="tag f">FIXED</span>Row limit and export count now show the total number of matches</li></ul>
+  <h4>v3.x &mdash; current (illustrative)</h4>
+  <ul><li>Requests grid with column filters and Excel export</li><li>Dashboard with study, project and method distributions</li></ul>
+  <div class="note">Placeholder text. Real content to be agreed with the team.</div></div>
+</div>
+
+<!-- ============ DRAWER ============ -->
+<div class="drawer" id="dr">
+ <span class="x" id="drx">&times;</span>
+ <h2 style="margin:0">ARM-004211 <span class="new">NEW</span></h2>
+ <div class="mut">Task-101210 &middot; HTSPC_LIBRARYVAL &middot; Project ALX0081 &middot; Legacy UNILIMS 400021798</div>
+ <h4>Status lifecycle</h4>
+ <div class="step"><div class="st done"><i></i>Requested</div><div class="st done"><i></i>Ready</div><div class="st done"><i></i>Worklist</div><div class="st cur"><i></i>Analysis</div><div class="st"><i></i>Data in LDI</div><div class="st"><i></i>Registered</div><div class="st"><i></i>Done</div></div>
+ <h4>Methods</h4>
+ <table><tr><th>Method</th><th>Lab</th><th>Status</th><th>Worklist</th></tr>
+  <tr><td>LCMS_PURITY</td><td>FF-LCMS-2</td><td><span class="pill s4">Analysis begun</span></td><td><a class="l">WL-0187</a></td></tr>
+  <tr><td>NMR_1H</td><td>FF-NMR-1</td><td><span class="pill s2">Ready for analyst</span></td><td class="mut">&ndash;</td></tr></table>
+ <h4>Sample</h4>
+ <table><tr><td>Batch</td><td>FF.SSG00003.1</td><td>Container</td><td>0000001329</td></tr><tr><td>Plate / well</td><td>P-0187 / A1</td><td>Amount</td><td>20 mg</td></tr></table>
+ <h4>Data and links</h4>
+ <table><tr><td>LDI folder</td><td><a class="l">/ldi/ALX0081/ARM-004211/</a></td></tr><tr><td>Files received</td><td><span class="no">0 of 1 expected</span></td></tr><tr><td>ChemDiary</td><td><a class="l">Open study task</a> &middot; results not yet registered</td></tr></table>
+ <h4>History</h4>
+ <table><tr><th>When</th><th>Change</th><th>By</th></tr>
+  <tr><td>11-03 09:12</td><td>Worklist created &rarr; Analysis begun</td><td>LEAP</td></tr><tr><td>11-03 08:55</td><td>Ready for analyst &rarr; Worklist created (WL-0187)</td><td>a.analyst</td></tr><tr><td>10-30 14:02</td><td>Requested &rarr; Ready for analyst</td><td>System</td></tr></table>
+ <div class="row" style="margin-top:14px"><button class="btn sec">CANCEL REQUEST</button><button class="btn sec">ADD METHOD</button><button class="btn sec">REOPEN</button></div>
+ <div class="note">Cancel, add and reopen are role-controlled and always written to the audit trail.</div>
+</div>
+
+<script>
+const S={1:['Requested','s1'],2:['Ready for analyst','s2'],3:['Worklist created','s3'],4:['Analysis begun','s4'],5:['Data in LDI','s5'],6:['Results registered','s6'],7:['Completed','s7'],8:['Failed','sx'],9:['Cancelled','sc']};
+const rows=[
+['ARM-004211','Task-101210','HTSPC_LIBRARYVAL','LCMS_PURITY',4,'FF.SSG00003.1','0000001329','A1','2026-10-30','11-03 09:12',0,'400021798'],
+['ARM-004208','Task-101207','HTSPC_LIBRARYVAL','LCMS_PURITY',2,'FF.SAPB00041.3','0000001331','A2','2026-10-30','10-30 14:02',0,'400021793'],
+['ARM-004203','Task-101204','HTSPC_LIBRARYVAL','LCMS_PURITY',2,'FF.SSG00003.1','0000001329','A3','2026-10-30','10-30 14:02',0,'400021792'],
+['ARM-004197','Task-101198','HTSPC_LCMS_NMR_PURITY','LCMS_PURITY',2,'FF.SDE00138600003.1','','A4','2026-10-30','10-30 13:40',0,'400021790'],
+['ARM-004197','Task-101198','HTSPC_LCMS_NMR_PURITY','NMR_PURITY',2,'FF.SDE00138600003.1','','&ndash;','2026-10-30','10-30 13:40',0,'400021790'],
+['ARM-004150','Task-101094','AN_ACHIRAL','LCMS_PURITY',5,'FF.SSG00003.1','0000001329','B1','2026-10-29','11-02 16:20',1,'400021788'],
+['ARM-004146','Task-101091','HTSPC_LCMS_NMR_PURITY','NMR_PURITY',6,'FF.SSG00003.1','0000001329','B2','2026-10-29','11-02 17:05',1,'400021787'],
+['ARM-004139','Task-101088','HTSPC_LIBRARYVAL','LCMS_PURITY',3,'FF.SSG00003.1','0000001328','B3','2026-10-29','11-03 08:55',0,'400021786'],
+['ARM-004131','Task-101086','AN_ACHIRAL','NMR_1H',4,'FF.SSG00003.1','0000001328','&ndash;','2026-10-29','11-02 10:11',0,'400021785'],
+['ARM-004120','Task-101083','HTSPC_LCMS_NMR_PURITY','LCMS_PURITY',8,'FF.SSG00003.1','0000001328','B4','2026-10-29','11-01 12:30',0,'400021784'],
+['ARM-003988','Task-100270','Prep Peptide','LCMS_PURITY',7,'FF.SDE00138600003.1','0000001322','C1','2026-10-14','10-20 09:00',1,'400021764'],
+['ARM-003976','Task-99615','CoA_Small_Molecules','EA',2,'FF.SU109990500005.1','','&ndash;','2026-10-12','10-12 11:48',0,'400021715'],
+['ARM-003901','Task-99595','1H','NMR_1H',9,'FF.SU109990500005.4','','&ndash;','2026-10-09','10-10 08:30',0,'400021714']];
+const th='<tr><th class="g0"><input type="checkbox"></th><th>ARM ID</th><th>Study task</th><th>Task study name</th><th>Method <span class="new">NEW</span></th><th>Status</th><th class="g2">Batch</th><th class="g2">Container</th><th class="g2">Plate / well <span class="new">NEW</span></th><th>Request date</th><th>Updated <span class="new">NEW</span></th><th class="g3">Data in LDI <span class="new">NEW</span></th><th class="g0">Legacy UNILIMS ID</th></tr>';
+document.getElementById('rt').innerHTML=th+rows.map((r,i)=>{
+ const s=S[r[4]],ldi=r[10]?'<span class="ok">&#10003; received</span> <a class="l">Open in LDI</a>':(r[4]>=4&&r[4]<9?'<span class="no">awaiting</span>':'<span class="mut">&ndash;</span>');
+ return `<tr class="click" data-i="${i}"><td><input type="checkbox" class="cb"></td><td><a class="l">${r[0]}</a></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="pill ${s[1]}">${s[0]}</span></td><td>${r[5]}</td><td>${r[6]||'<span class="no">missing</span>'}</td><td>${r[7]}</td><td>${r[8]}</td><td>${r[9]}</td><td>${ldi}</td><td class="mut">${r[11]}</td></tr>`}).join('');
+// tabs
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===t.dataset.p));document.getElementById('dr').classList.remove('on')});
+// selection + drawer
+const upd=()=>{const n=document.querySelectorAll('.cb:checked').length;const b=document.getElementById('wlbtn');b.textContent='CREATE WORKLIST ('+n+')';b.classList.toggle('dis',n==0)};
+document.querySelectorAll('#rt tr.click').forEach(tr=>{tr.querySelector('.cb').onclick=e=>{e.stopPropagation();tr.classList.toggle('sel',e.target.checked);upd()};tr.onclick=()=>document.getElementById('dr').classList.add('on')});
+document.getElementById('drx').onclick=()=>document.getElementById('dr').classList.remove('on');
+// plate
+const pl=document.getElementById('plate');let h='<div class="h"></div>';for(let c=1;c<=12;c++)h+=`<div class="h">${c}</div>`;
+'ABCDEFGH'.split('').forEach((r,ri)=>{h+=`<div class="h">${r}</div>`;for(let c=1;c<=12;c++){let cl='',t='';if(ri==0&&c<=4){cl=c==4?'e':'u';t=c}else if(ri==7&&c>=11){cl='c';t='Cal'}h+=`<div class="${cl}">${t}</div>`}});pl.innerHTML=h;
+// bars
+function bars(id,data,max,col){document.getElementById(id).innerHTML=data.map(d=>`<div class="bar"><div class="lab">${d[0]}</div><div class="tr"><div class="fi" style="width:${d[1]/max*100}%;${col||''}${d[2]?'background:'+d[2]:''}"></div></div><div class="v">${d[1]}</div></div>`).join('')}
+bars('bstat',[['Requested',18,'#9aa0b8'],['Ready for analyst',64,'#4f86e8'],['Worklist created',31,'#8f5fe0'],['Analysis begun',47,'#e0a800'],['Data in LDI',29,'#1fa391'],['Results registered',23,'#2e9e3f'],['Failed',7,'#d63838']],70);
+bars('bage',[['&lt; 1 day',71,'#2e9e3f'],['1 - 3 days',80,'#4f86e8'],['3 - 5 days',38,'#e0a800'],['&gt; 5 days',7,'#d63838']],90);
+bars('bvol',[['LCMS_PURITY',182,'#4f86e8'],['NMR_PURITY',140,'#8f5fe0'],['NMR_1H',95,'#1fa391'],['EA',41,'#e0a800'],['Ion chromatography',38,'#9aa0b8'],['Other methods',73,'#c8cbdc']],200);
+</script></body></html>
